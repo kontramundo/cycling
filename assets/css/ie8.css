@@ -1,0 +1,4 @@
+/* IE 8 */
+.home{background: #000 url("../img/backgrounds/home-bg-ie.png") 50% 0 no-repeat !important;}
+.flowArticle h1{width: 700px; margin-left: auto !important; margin-right: auto !important;}
+.footer{background: #e5e5e5 url("../img/backgrounds/footer-bg.png") repeat-x;}
