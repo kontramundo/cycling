@@ -24,7 +24,7 @@ foreach ($comentarios AS $comentario):
                                     ?>
                                     <div class="row">
                                         <div class="col-md-6 col-md-offset-3">
-                                            <img class="img-responsive" src="<?php echo base_url();?>imagen/crop/500/500/<?php echo $comentario->imagen;?>"/>
+                                            <img class="img-responsive" src="<?php echo base_url();?>imagen/crop/400/400/<?php echo $comentario->imagen;?>"/>
                                         </div>
                                     </div>
                                     <?php

@@ -40,6 +40,7 @@ class Noticias extends CI_Controller {
 		$id_usuario = $this->session->userdata['id_usuario'];
 		$data['usuario'] = $this->session->userdata['usuario'];
 
+
 		if($first_id)
 		{
 			$id=">".$first_id;
@@ -303,6 +304,7 @@ class Noticias extends CI_Controller {
 
 
 		$comentario=$this->input->post('comentario');
+		$comentario = str_replace("\n", "<br>", $comentario);
 
 		$id_comentario=$this->noticias_model->query_insertar_comentario($id_usuario, $comentario);
 
