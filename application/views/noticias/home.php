@@ -20,15 +20,17 @@
                 <ol class="breadcrumb">
                     <li> <i class="fa fa-user"></i></li>
                     <li><i class="fa fa-map-marker"></i></li>
-                    <li><i class="fa fa-camera"></i></li>
+                    <li><a href="" class="operacion" id="foto"><i class="fa fa-camera"></i></a></li>
                     <li><i class="fa fa-smile-o"></i></li>    
                 </ol>
-                
         <div class="row">
             <div class="col-lg-8"></div>
             <div class="col-lg-4" style="margin-top:-38px;"><button type="button" id="btn_comentario" class="btn btn-red" style="float:right;padding:1px 5px;font-size:12px;line-height:1.5;border-radius:3px;">Publicar</button></div>    
         </div>
+    
 
+        <div class="tile gray" id="div_operacion" style="display:none;">
+            <input type="file" name="upload" id="upload" />
         </div>
 
     </div>
@@ -68,6 +70,14 @@
 
         //Comentario
         $('#comentario').autosize();
+
+        //Click Accion
+        $(".operacion").click(function(evento){
+            evento.preventDefault();
+
+            $("#div_operacion").slideToggle("fast");
+
+        });
 
 
         //Click Publicar
@@ -235,6 +245,7 @@
         });
 
 
+        var cont = 1;
         $(window).scroll(function(){
 
             //Carga viejos comentarios
@@ -244,8 +255,7 @@
 
 
                 //Muestra Animacion
-                $("#loader_top").show();
-                $("#loader_top").fadeIn(5000).html('<img src="<?php echo base_url();?>/assets_gral/img/loader.gif" align="absmiddle">');
+                $("#loader_top").show('slow').html('<img src="<?php echo base_url();?>/assets_gral/img/loader.gif" align="absmiddle">');
 
                
                 if(last_id)
@@ -255,38 +265,51 @@
                         type:'POST',
                         data:{last_id: last_id},
                         success:function(result){
-                            $("#loader_top").hide();
                             $("#mensajes").append(result).show('slow');
                         }
                     });
+
+                    $("#loader_top").hide('slow');
                 }
             }
 
-            //Carga nuevos comentarios
-            var currentScroll = $(this).scrollTop();
 
-            if (currentScroll<4)
+            //carga nuevos comentarios
+            if($(window).scrollTop() <= 0) 
             {
+
                 var first_id = $(".comentario").first().attr("id");
+                
+                if(cont==1)
+                {
+                    cont=0;
 
+                    $("#loader").show('fast').html('<img src="<?php echo base_url();?>/assets_gral/img/loader.gif" align="absmiddle">');
+                    
+                    //Carga viejos comentarios
+                    $.ajax({url:"<?php echo base_url();?>noticias/mensajes",
+                        type:'POST',
+                        data:{first_id: first_id},
+                        success:function(result){
+                            
+                            $("#mensajes").prepend(result).show('slow');
+                            
 
-                //Muestra Animacion
-                $("#loader").show();
-                $("#loader").fadeIn(5000).html('<img src="<?php echo base_url();?>/assets_gral/img/loader.gif" align="absmiddle">');
+                        }
+                    });
 
-
-                //Carga viejos comentarios
-                $.ajax({url:"<?php echo base_url();?>noticias/mensajes",
-                    type:'POST',
-                    data:{first_id: first_id},
-                    success:function(result){
-                        $("#loader").hide();
-                        $("#mensajes").prepend(result).show('slow');
-                    }
-                });
+                    $("#loader").hide('fast');
+                }
+            } 
+            else 
+            {
+                $("#loader").hide('fast');
+                cont=1;
             }
+
+
+
+
         });
-
-
     });
 </script>
