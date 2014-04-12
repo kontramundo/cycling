@@ -304,9 +304,60 @@ class Noticias extends CI_Controller {
 
 
 		$comentario=$this->input->post('comentario');
-		$comentario = str_replace("\n", "<br>", $comentario);
+		
+		$comentario = str_replace("\n", "<br/>", $comentario);
 
-		$id_comentario=$this->noticias_model->query_insertar_comentario($id_usuario, $comentario);
+
+
+
+		if (!empty($_FILES)) 
+		{
+			$tempFile = $_FILES['imagen']['tmp_name'];
+
+			$nameFile='img_'.uniqid().'.jpg';
+			$targetFile=$_SERVER['DOCUMENT_ROOT'].'/cycling/assets_gral/img/uploads/'.$nameFile;
+			
+			// Validate the file type
+			//$fileTypes = array('jpg','jpeg','JPG','JPEG'); // File extensions
+			$fileTypes = array("image/jpg", "image/jpeg");
+			$fileParts = pathinfo($_FILES['imagen']['name']);
+
+			
+			
+			if (in_array($_FILES['imagen']['type'],$fileTypes)) 
+			{
+				if (move_uploaded_file($tempFile,$targetFile))
+				{
+					$imagen=$nameFile;
+					?>
+					<!-- <p class="msj">El archivo "<?php echo $_FILES['imagen']['name'];?>" se ha cargado correctamente</p> -->
+					<?php
+				}
+				else
+				{
+					?>
+					<p class="error">No se pudo cargar el archivo</p>
+					<?php
+				}
+			} 
+			else 
+			{
+				?>
+				<p class="error">Archivo Invalido</p>
+				<?php
+			}
+
+		}
+		else
+		{
+			$imagen="";
+		}
+
+
+
+
+		
+		$id_comentario=$this->noticias_model->query_insertar_comentario($id_usuario, $comentario, $imagen);
 
 
 		if($id_comentario)
@@ -315,9 +366,9 @@ class Noticias extends CI_Controller {
 			$datos = array(
                'id_comentario' => $id_comentario,
                'comentario' => $comentario,
+               'imagen' => $imagen,
                'usuario' => $usuario,
                'foto' => $foto
-
           	);
 
 			//Carga la vista publicar comentario

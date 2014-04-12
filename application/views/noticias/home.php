@@ -20,7 +20,11 @@
                 <ol class="breadcrumb">
                     <li> <i class="fa fa-user"></i></li>
                     <li><i class="fa fa-map-marker"></i></li>
-                    <li><a href="" class="operacion" id="foto"><i class="fa fa-camera"></i></a></li>
+                    <li>
+
+                        <a href="" class="operacion" id="foto"><i class="fa fa-camera"></i></a>
+
+                    </li>
                     <li><i class="fa fa-smile-o"></i></li>    
                 </ol>
         <div class="row">
@@ -29,8 +33,19 @@
         </div>
     
 
-        <div class="tile gray" id="div_operacion" style="display:none;">
-            <input type="file" name="upload" id="upload" />
+        <div class="tile breadcrumb" id="div_operacion" style="display:none;">
+           
+            <div class="fileinput fileinput-new" data-provides="fileinput">
+                <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;display:none">
+                    <img data-src="holder.js/100%x100%" >
+                </div>
+                <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
+                <div>
+                    <span class="btn btn-red btn-file"><span class="fileinput-new">Seleccione</span><span class="fileinput-exists"><i class="fa fa-pencil"></i></span><input type="file" name="imagen" id="imagen" accept="image/*"></span>
+                    <a href="#" class="btn btn-red fileinput-exists"  id="trash" data-dismiss="fileinput"><i class="fa fa-trash-o"></i></a>
+                </div>
+            </div>
+
         </div>
 
     </div>
@@ -64,6 +79,10 @@
 
 <!-- JS Autosize -->
 <script type="text/javascript" src="<?php echo base_url();?>assets_gral/js/plugins/autosize/jquery.autosize.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>assets_gral/js/plugins/jasny-bootstrap/jasny-bootstrap.min.js"></script>
+
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets_gral/css/plugins/jasny-bootstrap/jasny-bootstrap.min.css">
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -80,19 +99,42 @@
         });
 
 
-        //Click Publicar
+        //Publicar Comentario
         $("#btn_comentario").click(function(evento){
             evento.preventDefault();
 
-            //Inserta Comentario
-            $.ajax({url:"<?php echo base_url();?>noticias/insertar_comentario",
-                type:'POST',
-                data:{comentario: $("#comentario").val()},
-                success:function(result){
-                        $("#comentario").val('');
-                        $("#mensajes").prepend(result);
-                      }
-            });
+            var comentario=$("#comentario").val();
+
+            if(comentario)
+            {
+                var inputFileImage = document.getElementById("imagen");
+                var file = inputFileImage.files[0];
+                var data = new FormData();
+                    data.append('imagen',file);
+                    data.append('comentario',comentario);
+
+                 //Inserta Comentario
+                $.ajax({url:"<?php echo base_url();?>noticias/insertar_comentario",
+                    type:'POST',
+                    contentType:false,
+                    data:data,
+                    processData:false,
+                    cache:false,
+                    success:function(result){
+                            $("#comentario").val('');
+                            $("#mensajes").prepend(result);
+                            $("#div_operacion").hide("fast");
+                            $('#trash').click();
+                          }
+                });
+            }
+            else
+            {
+                $("#comentario").focus();
+            }
+
+
+
         });
 
 
@@ -279,7 +321,7 @@
             {
 
                 var first_id = $(".comentario").first().attr("id");
-                
+
                 if(cont==1)
                 {
                     cont=0;

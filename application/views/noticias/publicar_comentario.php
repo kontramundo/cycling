@@ -8,12 +8,26 @@
                             <a class="pull-left" href="chat.html#">
                                 <img class="media-object img-circle" src="<?php echo base_url('assets_gral/img/usuarios/'.$foto);?>" alt="" style="width:40px;height:40px">
                             </a>
-                            <div class="media-body">
+                            <div class="media-body comentario" id="<?php echo $id_comentario;?>">
                                 <h4 class="media-heading"><?php echo utf8_decode(ucwords(strtolower($usuario)));?>
                                     <span class="small pull-right"><?php echo 'Hace unos segundos';?></span>
                                 </h4>
                                 <p><?php echo utf8_decode($comentario);?></p>
                             </div>
+
+                            <?php 
+                            if($imagen):
+                                ?>
+                                <div class="row">
+                                    <div class="col-md-6 col-md-offset-3">
+                                        <img class="img-responsive" src="<?php echo base_url();?>imagen/crop/400/400/<?php echo $imagen;?>"/>
+                                    </div>
+                                </div>
+                                <?php
+                            endif;
+                            ?>
+
+
                         </div>
                     </div>
 

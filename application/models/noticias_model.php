@@ -93,9 +93,9 @@ class Noticias_model extends CI_Model {
 	}
 
 
-	function query_insertar_comentario($id_usuario, $comentario)
+	function query_insertar_comentario($id_usuario, $comentario, $imagen)
 	{
-		$query = $this->db->query("INSERT INTO comentarios (comentario, id_usuario) VALUES('$comentario', $id_usuario)");
+		$query = $this->db->query("INSERT INTO comentarios (comentario, imagen, id_usuario) VALUES('$comentario', '$imagen', $id_usuario)");
 		
 		return $this->db->insert_id();	
 	}
