@@ -25,7 +25,9 @@
                         <a href="" class="operacion" id="foto"><i class="fa fa-camera"></i></a>
 
                     </li>
-                    <li><i class="fa fa-smile-o"></i></li>    
+                    <li>
+                         <a href="" class="operacion" id="emoticones"><i class="fa fa-smile-o"></i></a>
+                    </li>    
                 </ol>
         <div class="row">
             <div class="col-lg-8"></div>
@@ -33,7 +35,7 @@
         </div>
     
 
-        <div class="tile breadcrumb" id="div_operacion" style="display:none;">
+        <div class="tile breadcrumb oculta" id="div_foto" style="display:none;">
            
             <div class="fileinput fileinput-new" data-provides="fileinput">
                 <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;display:none">
@@ -44,6 +46,19 @@
                     <span class="btn btn-red btn-file"><span class="fileinput-new">Seleccione</span><span class="fileinput-exists"><i class="fa fa-pencil"></i></span><input type="file" name="imagen" id="imagen" accept="image/*"></span>
                     <a href="#" class="btn btn-red fileinput-exists"  id="trash" data-dismiss="fileinput"><i class="fa fa-trash-o"></i></a>
                 </div>
+            </div>
+
+        </div>
+
+        <div class="tile breadcrumb oculta" id="div_emoticones" style="display:none;">
+
+            <div class="btn-group">
+                <?php
+                foreach ($emoticones as $emoticon) 
+                {
+                    echo '<a href="" class="btn emoticon" title="'.$emoticon->signo.'"><img src="'.base_url('assets_gral/img/emoticones/'.$emoticon->emoticon).'" /></a>';
+                }
+                ?>
             </div>
 
         </div>
@@ -94,8 +109,25 @@
         $(".operacion").click(function(evento){
             evento.preventDefault();
 
-            $("#div_operacion").slideToggle("fast");
+            if($(this).attr('id')=='foto')
+            {
+                $("#div_emoticones").hide("fast");
 
+                $("#div_foto").slideToggle("fast");
+            }
+            else if($(this).attr('id')=='emoticones')
+            {
+                $("#div_foto").hide("fast");
+                $("#div_emoticones").slideToggle("fast");
+            }
+
+        });
+
+        //Click Emoticon
+        $(".emoticon").click(function(evento){
+            evento.preventDefault();
+
+            $("#comentario").val($("#comentario").val()+$(this).attr('title'));
         });
 
 

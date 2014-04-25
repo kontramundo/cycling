@@ -77,6 +77,13 @@ class Noticias_model extends CI_Model {
 		return $query->result(); 
 	}
 
+	function query_emoticones()
+	{
+		$query = $this->db->query("SELECT signo, emoticon FROM emoticones");
+
+		return $query->result();
+	}
+
 	function query_insertar_like($tipo_comentario,$tipo_like,$id_comentario,$status,$id_usuario)
 	{
 		$query = $this->db->query("CALL inserta_like ('$tipo_comentario', '$tipo_like', '$id_comentario', '$status', '$id_usuario')");

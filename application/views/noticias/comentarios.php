@@ -15,7 +15,7 @@ foreach ($comentarios AS $comentario):
                                     <h4 class="media-heading"><?php echo utf8_decode(ucwords(strtolower($comentario->nombre)));?>
                                         <span class="small pull-right"><?php echo $comentario->cuando;?></span>
                                     </h4>
-                                    <p><?php echo utf8_decode($comentario->comentario);?></p>
+                                    <p><?php echo utf8_decode(str_replace($signo, $emoticon, $comentario->comentario));?></p>
                                     
                                 </div>
 
