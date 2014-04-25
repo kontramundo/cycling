@@ -19,11 +19,11 @@
                 <textarea class="form-control" placeholder="&iquest;Que est&aacute;s pensando?" id="comentario" style="resize: vertical;"></textarea>
                 <ol class="breadcrumb">
                     <li> <i class="fa fa-user"></i></li>
-                    <li><i class="fa fa-map-marker"></i></li>
                     <li>
-
+                        <a href="" class="operacion" id="mapa"><i class="fa fa-map-marker"></i></a>
+                    </li>
+                    <li>
                         <a href="" class="operacion" id="foto"><i class="fa fa-camera"></i></a>
-
                     </li>
                     <li>
                          <a href="" class="operacion" id="emoticones"><i class="fa fa-smile-o"></i></a>
@@ -35,32 +35,44 @@
         </div>
     
 
-        <div class="tile breadcrumb oculta" id="div_foto" style="display:none;">
-           
-            <div class="fileinput fileinput-new" data-provides="fileinput">
-                <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;display:none">
-                    <img data-src="holder.js/100%x100%" >
+        <div id="div_operaciones">
+            <div class="tile breadcrumb oculta" id="div_foto" style="display:none;">
+               
+                <div class="fileinput fileinput-new" data-provides="fileinput">
+                    <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;display:none">
+                        <img data-src="holder.js/100%x100%" >
+                    </div>
+                    <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
+                    <div>
+                        <span class="btn btn-red btn-file"><span class="fileinput-new">Seleccione</span><span class="fileinput-exists"><i class="fa fa-pencil"></i></span><input type="file" name="imagen" id="imagen" accept="image/*"></span>
+                        <a href="#" class="btn btn-red fileinput-exists"  id="trash" data-dismiss="fileinput"><i class="fa fa-trash-o"></i></a>
+                    </div>
                 </div>
-                <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
-                <div>
-                    <span class="btn btn-red btn-file"><span class="fileinput-new">Seleccione</span><span class="fileinput-exists"><i class="fa fa-pencil"></i></span><input type="file" name="imagen" id="imagen" accept="image/*"></span>
-                    <a href="#" class="btn btn-red fileinput-exists"  id="trash" data-dismiss="fileinput"><i class="fa fa-trash-o"></i></a>
-                </div>
+
             </div>
 
-        </div>
+            <div class="tile breadcrumb oculta" id="div_emoticones" style="display:none;">
 
-        <div class="tile breadcrumb oculta" id="div_emoticones" style="display:none;">
+                <div class="btn-group">
+                    <?php
+                    foreach ($emoticones as $emoticon) 
+                    {
+                        echo '<a href="" class="btn emoticon" title="'.$emoticon->signo.'"><img src="'.base_url('assets_gral/img/emoticones/'.$emoticon->emoticon).'" /></a>';
+                    }
+                    ?>
+                </div>
 
-            <div class="btn-group">
-                <?php
-                foreach ($emoticones as $emoticon) 
-                {
-                    echo '<a href="" class="btn emoticon" title="'.$emoticon->signo.'"><img src="'.base_url('assets_gral/img/emoticones/'.$emoticon->emoticon).'" /></a>';
-                }
-                ?>
             </div>
 
+
+             <div class="tile breadcrumb oculta" id="div_mapa" style="display:none;">
+                <form>
+                    <input type="text" id="geocomplete" class="form-control" name="location" placeholder="¿D&oacute;nde est&aacute;s?"> 
+                    <div class="map_canvas" style="height: 150px;"></div> 
+                    <input type="hidden" name="lat" id="lat"/>
+                    <input type="hidden" name="lng" id="lng"/>
+                </form>  
+            </div>
         </div>
 
     </div>
@@ -92,15 +104,31 @@
 </div>
 <!-- /.row -->
 
+
+
+
 <!-- JS Autosize -->
 <script type="text/javascript" src="<?php echo base_url();?>assets_gral/js/plugins/autosize/jquery.autosize.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>assets_gral/js/plugins/jasny-bootstrap/jasny-bootstrap.min.js"></script>
 
+<!-- JS MAPS -->
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
+<script type="text/javascript" src="<?php echo base_url();?>assets_gral/js/plugins/google-maps/jquery.geocomplete.js"></script>
+
 <!-- CSS -->
 <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets_gral/css/plugins/jasny-bootstrap/jasny-bootstrap.min.css">
 
+
 <script type="text/javascript">
     $(document).ready(function(){
+
+
+        //Localizacion
+        $("#geocomplete").geocomplete({
+            map: ".map_canvas",
+            details: "form",
+            types: ["geocode", "establishment"]
+          }); 
 
         //Comentario
         $('#comentario').autosize();
@@ -111,6 +139,7 @@
 
             if($(this).attr('id')=='foto')
             {
+                $("#div_mapa").hide("fast");
                 $("#div_emoticones").hide("fast");
 
                 $("#div_foto").slideToggle("fast");
@@ -118,7 +147,16 @@
             else if($(this).attr('id')=='emoticones')
             {
                 $("#div_foto").hide("fast");
+                $("#div_mapa").hide("fast");
+
                 $("#div_emoticones").slideToggle("fast");
+            }
+            else if($(this).attr('id')=='mapa')
+            {
+                $("#div_foto").hide("fast");
+                $("#div_emoticones").hide("fast");
+
+                $("#div_mapa").slideToggle("fast");
             }
 
         });
@@ -136,6 +174,10 @@
             evento.preventDefault();
 
             var comentario=$("#comentario").val();
+            var latitud=$("#lat").val();
+            var longitud=$("#lng").val();
+            var ubicacion=$("#geocomplete").val();
+
 
             if(comentario)
             {
@@ -143,6 +185,9 @@
                 var file = inputFileImage.files[0];
                 var data = new FormData();
                     data.append('imagen',file);
+                    data.append('lat',latitud);
+                    data.append('lng',longitud);
+                    data.append('ubicacion',ubicacion);
                     data.append('comentario',comentario);
 
                  //Inserta Comentario
@@ -155,8 +200,9 @@
                     success:function(result){
                             $("#comentario").val('');
                             $("#mensajes").prepend(result);
-                            $("#div_operacion").hide("fast");
-                            $('#trash').click();
+                            $("#div_operaciones").hide("fast");
+                                $("#geocomplete").val('');
+                                $('#trash').click();
                           }
                 });
             }
@@ -164,9 +210,6 @@
             {
                 $("#comentario").focus();
             }
-
-
-
         });
 
 
@@ -177,6 +220,14 @@
             success:function(result){
                 $("#mensajes").html(result);
             }
+        });
+
+        //Muestra Mapa de comentario
+        $("#mensajes").on('click', '.muestra_mapa', function(evento){
+            evento.preventDefault();
+            var id_comentario=$(this).attr('href');
+
+            $("#mapa_"+id_comentario).slideToggle("fast");
         });
 
         //Click Me gusta

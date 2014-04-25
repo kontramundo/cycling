@@ -166,14 +166,15 @@ class Noticias extends CI_Controller {
 		$usuario=$this->session->userdata['usuario'];
 		$foto=$this->session->userdata['foto'];
 
-
 		$comentario=$this->input->post('comentario');
-		
+		$latitud=$this->input->post('lat');
+		$longitud=$this->input->post('lng');
+		$ubicacion=$this->input->post('ubicacion');
+
+		//Reemplaza <br/> por \n (Espacios)
 		$comentario = str_replace("\n", "<br/>", $comentario);
 
-
-
-
+		//Verifica si cargo una imagen
 		if (!empty($_FILES)) 
 		{
 			$tempFile = $_FILES['imagen']['tmp_name'];
@@ -221,7 +222,7 @@ class Noticias extends CI_Controller {
 
 
 		
-		$id_comentario=$this->noticias_model->query_insertar_comentario($id_usuario, $comentario, $imagen);
+		$id_comentario=$this->noticias_model->query_insertar_comentario($id_usuario, $comentario, $imagen, $latitud, $longitud, $ubicacion);
 
 
 		if($id_comentario)
@@ -236,7 +237,10 @@ class Noticias extends CI_Controller {
                'comentario' => $comentario,
                'imagen' => $imagen,
                'usuario' => $usuario,
-               'foto' => $foto
+               'foto' => $foto,
+               'latitud' => $latitud,
+               'longitud' => $longitud,
+               'ubicacion' => $ubicacion
           	);
 
 			//Carga la vista publicar comentario

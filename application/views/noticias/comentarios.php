@@ -15,23 +15,45 @@ foreach ($comentarios AS $comentario):
                                     <h4 class="media-heading"><?php echo utf8_decode(ucwords(strtolower($comentario->nombre)));?>
                                         <span class="small pull-right"><?php echo $comentario->cuando;?></span>
                                     </h4>
-                                    <p><?php echo utf8_decode(str_replace($signo, $emoticon, $comentario->comentario));?></p>
+                                    <p>
+                                        <?php 
+                                        //comentario
+                                        echo utf8_decode(str_replace($signo, $emoticon, $comentario->comentario));
+
+                                        //Verifica si hay ubicacion
+                                        if($comentario->latitud && $comentario->longitud && $comentario->ubicacion):
+                                            ?>
+                                            <span class='text-muted'> - en </span><a href='<?php echo $comentario->id_comentario;?>' class='muestra_mapa text-primary'><?php echo utf8_decode($comentario->ubicacion);?></a>
+                                            <?php
+                                        endif;
+                                        ?>
+                                    </p>
                                     
                                 </div>
 
-                                <?php 
-                                if($comentario->imagen):
-                                    ?>
-                                    <div class="row">
-                                        <div class="col-md-6 col-md-offset-3">
+                                <!-- Contenido multimedia del comentario -->
+                                <div class="row">
+                                    <div class="col-md-6 col-md-offset-3">
+                                        <?php 
+                                        //Imprime Mapa
+                                        if($comentario->latitud && $comentario->longitud && $comentario->ubicacion):
+                                            ?>
+                                            <div id="mapa_<?php echo $comentario->id_comentario;?>" style="display:none">
+                                                <img class="img-responsive" src="http://maps.googleapis.com/maps/api/staticmap?size=400x150&maptype=roadmap\&zoom=15&markers=size:mid%7Ccolor:red%7C<?php echo $comentario->latitud;?>,<?php echo $comentario->longitud;?>&sensor=false" />    
+                                            </div>
+                                            <?php
+                                        endif;
+
+                                        //Imprime Imagen
+                                        if($comentario->imagen):
+                                            ?>
                                             <img class="img-responsive" src="<?php echo base_url();?>imagen/crop/400/400/<?php echo $comentario->imagen;?>"/>
-                                        </div>
+                                            <?php
+                                        endif;
+                                        ?>
                                     </div>
-                                    <?php
-                                endif;
-                                ?>
-
-
+                                </div>
+                                <!-- Fin contenido multimedia del comentario -->
 
                             </div>
                         </div>

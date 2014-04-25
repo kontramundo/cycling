@@ -12,20 +12,42 @@
                                 <h4 class="media-heading"><?php echo utf8_decode(ucwords(strtolower($usuario)));?>
                                     <span class="small pull-right"><?php echo 'Hace unos segundos';?></span>
                                 </h4>
-                                <p><?php echo utf8_decode($comentario);?></p>
+                                <p>
+                                    <?php echo utf8_decode($comentario);
+
+                                    //Verifica si hay ubicacion
+                                    if($latitud && $longitud && $ubicacion):
+                                        ?>
+                                        <span class='text-muted'> - en </span><a href='<?php echo $id_comentario;?>' class='muestra_mapa text-primary'><?php echo utf8_decode($ubicacion);?></a>
+                                        <?php
+                                    endif;
+                                    ?>
+                                </p>
                             </div>
 
-                            <?php 
-                            if($imagen):
-                                ?>
-                                <div class="row">
-                                    <div class="col-md-6 col-md-offset-3">
+                            <!-- Contenido multimedia del comentario -->
+                            <div class="row">
+                                <div class="col-md-6 col-md-offset-3">
+                                    <?php 
+                                    //Imprime mapa
+                                    if($latitud && $longitud && $ubicacion):
+                                        ?>
+                                        <div id="mapa_<?php echo $id_comentario;?>" style="display:none">
+                                            <img class="img-responsive" src="http://maps.googleapis.com/maps/api/staticmap?size=400x150&maptype=roadmap\&zoom=15&markers=size:mid%7Ccolor:red%7C<?php echo $latitud;?>,<?php echo $longitud;?>&sensor=false" />    
+                                        </div>
+                                        <?php
+                                    endif;
+
+                                    //imrpime imagen
+                                    if($imagen):
+                                        ?>
                                         <img class="img-responsive" src="<?php echo base_url();?>imagen/crop/400/400/<?php echo $imagen;?>"/>
-                                    </div>
+                                        <?php
+                                    endif;
+                                    ?>
                                 </div>
-                                <?php
-                            endif;
-                            ?>
+                            </div>
+                            <!-- Fin contenido multimedia del comentario -->
 
 
                         </div>

@@ -3,7 +3,7 @@ class Noticias_model extends CI_Model {
 
 	function query_comentarios($id_usuario, $last_id)
 	{
-		$query = $this->db->query("SELECT C.id_comentario, C.comentario, C.imagen,
+		$query = $this->db->query("SELECT C.id_comentario, C.comentario, C.imagen, C.latitud, C.longitud, C.ubicacion,
 										CASE 
 											WHEN TIMESTAMPDIFF(SECOND, C.fecha_registro, now())<60 THEN CONCAT_WS(' ', 'Hace', TIMESTAMPDIFF(SECOND, C.fecha_registro, now()), 'segundos')
 											WHEN TIMESTAMPDIFF(MINUTE, C.fecha_registro, now())=1 THEN 'Hace un minuto aproximadamente'
@@ -100,9 +100,9 @@ class Noticias_model extends CI_Model {
 	}
 
 
-	function query_insertar_comentario($id_usuario, $comentario, $imagen)
+	function query_insertar_comentario($id_usuario, $comentario, $imagen, $latitud, $longitud, $ubicacion)
 	{
-		$query = $this->db->query("INSERT INTO comentarios (comentario, imagen, id_usuario) VALUES('$comentario', '$imagen', $id_usuario)");
+		$query = $this->db->query("INSERT INTO comentarios (comentario, imagen, latitud, longitud, ubicacion, id_usuario) VALUES('$comentario', '$imagen', '$latitud', '$longitud', '$ubicacion', $id_usuario)");
 		
 		return $this->db->insert_id();	
 	}
