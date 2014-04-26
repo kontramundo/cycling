@@ -12,18 +12,18 @@ foreach ($comentarios AS $comentario):
                                     <img class="media-object img-circle" src="<?php echo base_url('assets_gral/img/usuarios/'.$comentario->foto);?>" alt="" style="width:40px;height:40px">
                                 </a>
                                 <div class="media-body comentario" id="<?php echo $comentario->id_comentario;?>">
-                                    <h4 class="media-heading"><?php echo utf8_decode(ucwords(strtolower($comentario->nombre)));?>
+                                    <h4 class="media-heading"><?php echo ucwords(strtolower($comentario->nombre));?>
                                         <span class="small pull-right"><?php echo $comentario->cuando;?></span>
                                     </h4>
                                     <p>
                                         <?php 
                                         //comentario
-                                        echo utf8_decode(str_replace($signo, $emoticon, $comentario->comentario));
+                                        echo str_replace($signo, $emoticon, $comentario->comentario);
 
                                         //Verifica si hay ubicacion
                                         if($comentario->latitud && $comentario->longitud && $comentario->ubicacion):
                                             ?>
-                                            <span class='text-muted'> - en </span><a href='<?php echo $comentario->id_comentario;?>' class='muestra_mapa text-primary'><?php echo utf8_decode($comentario->ubicacion);?></a>
+                                            <span class='text-muted'> - en </span><a href='<?php echo $comentario->id_comentario;?>' class='muestra_mapa text-muted'><?php echo $comentario->ubicacion;?></a>
                                             <?php
                                         endif;
                                         ?>
@@ -120,7 +120,7 @@ foreach ($comentarios AS $comentario):
                                                 <h4 class="media-heading"><?php echo utf8_decode(ucwords(strtolower($subcomentario->nombre)));?>
                                                     <span class="small pull-right"><?php echo $subcomentario->cuando;?></span>
                                                 </h4>
-                                                <p><?php echo $subcomentario->subcomentario;?></p>
+                                                <p><?php echo str_replace($signo, $emoticon, $subcomentario->subcomentario);?></p>
                                             </div>
 
                                             <div class="col-md-7">

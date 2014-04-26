@@ -9,16 +9,16 @@
                                 <img class="media-object img-circle" src="<?php echo base_url('assets_gral/img/usuarios/'.$foto);?>" alt="" style="width:40px;height:40px">
                             </a>
                             <div class="media-body comentario" id="<?php echo $id_comentario;?>">
-                                <h4 class="media-heading"><?php echo utf8_decode(ucwords(strtolower($usuario)));?>
+                                <h4 class="media-heading"><?php echo ucwords(strtolower($usuario));?>
                                     <span class="small pull-right"><?php echo 'Hace unos segundos';?></span>
                                 </h4>
                                 <p>
-                                    <?php echo utf8_decode($comentario);
+                                    <?php echo $comentario;
 
                                     //Verifica si hay ubicacion
                                     if($latitud && $longitud && $ubicacion):
                                         ?>
-                                        <span class='text-muted'> - en </span><a href='<?php echo $id_comentario;?>' class='muestra_mapa text-primary'><?php echo utf8_decode($ubicacion);?></a>
+                                        <span class='text-muted'> - en </span><a href='<?php echo $id_comentario;?>' class='muestra_mapa text-muted'><?php echo $ubicacion;?></a>
                                         <?php
                                     endif;
                                     ?>

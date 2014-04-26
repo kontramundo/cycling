@@ -9,6 +9,7 @@
     <meta name="author" content="">
 
     <title>Cycling Community</title>
+    <link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url('/assets/img/icons/favicon.ico')?>" />
 
     <!-- PACE LOAD BAR PLUGIN - This creates the subtle load bar effect at the top of the page. -->
     <!-- Plugin AUTOLOAD -->

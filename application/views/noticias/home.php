@@ -200,7 +200,7 @@
                     success:function(result){
                             $("#comentario").val('');
                             $("#mensajes").prepend(result);
-                            $("#div_operaciones").hide("fast");
+                            $(".oculta").hide("fast");
                                 $("#geocomplete").val('');
                                 $('#trash').click();
                           }
